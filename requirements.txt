@@ -1,0 +1,7 @@
+numpy>=1.26,<3
+opencv-python-headless>=4.10,<5
+Pillow>=10,<13
+torch>=2.4,<3
+streamlit>=1.40,<2
+pytest>=8,<10
+ruff>=0.8,<1
