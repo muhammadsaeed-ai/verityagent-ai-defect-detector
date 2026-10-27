@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "verityagent-ai-defect-detector"
+version = "0.1.0"
+description = "Reference-image comparison and PyTorch anomaly detection for visible product defects."
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = { file = "LICENSE" }
+authors = [{ name = "Muhammad Saeed" }]
+keywords = ["computer-vision", "defect-detection", "opencv", "pytorch", "anomaly-detection", "verityagent"]
+classifiers = ["Development Status :: 3 - Alpha", "Intended Audience :: Developers", "License :: OSI Approved :: MIT License", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3.11", "Programming Language :: Python :: 3.12", "Programming Language :: Python :: 3.13", "Topic :: Scientific/Engineering :: Image Recognition"]
+dependencies = ["numpy>=1.26,<3", "opencv-python-headless>=4.10,<5", "Pillow>=10,<13", "torch>=2.4,<3"]
+
+[project.optional-dependencies]
+app = ["streamlit>=1.40,<2"]
+dev = ["pytest>=8,<10", "ruff>=0.8,<1"]
+
+[project.scripts]
+verity-defect = "verityagent_defect_detector.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
