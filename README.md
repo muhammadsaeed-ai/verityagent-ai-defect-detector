@@ -167,8 +167,10 @@ python -m pip install -e ".[app,dev]"
 
 ## Demo without a trained model
 
+The repository intentionally keeps the generated PNG demo data out of Git history. Generate it locally into the documented demo directory:
+
 ```bash
-python scripts/create_demo_data.py --output-dir outputs/synthetic-demo-data
+python scripts/create_demo_data.py --output-dir examples/demo_data
 verity-defect compare \
   --reference examples/demo_data/reference_synthetic.png \
   --inspection examples/demo_data/inspection_scratch_synthetic.png \
@@ -176,7 +178,7 @@ verity-defect compare \
   --threshold 22 --blur-kernel 3 --min-area 30
 ```
 
-The output includes `report.json`, `difference_map.png`, `binary_mask.png`, `anomaly_heatmap.png`, `overlay.png` and `annotated_inspection.png`.
+The executable run creates `report.json`, `difference_map.png`, `binary_mask.png`, `anomaly_heatmap.png`, `overlay.png` and `annotated_inspection.png`. The README infographic already contains the actual annotated result as embedded visual evidence.
 
 ## Streamlit dashboard
 
