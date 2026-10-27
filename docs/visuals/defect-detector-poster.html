@@ -1,29 +1,23 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VerityAgent — AI Defect Detector</title><style>:root{--bg:#080b10;--panel:#0f141c;--line:#273241;--text:#f4f7fb;--muted:#93a0b3;--blue:#4ea1ff;--cyan:#74e7ff;--green:#68e0b4}*{box-sizing:border-box}body{margin:0;background:#05070a;color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}.poster{width:1600px;min-height:1000px;padding:56px;background:radial-gradient(circle at 82% 18%,rgba(78,161,255,.18),transparent 30%),linear-gradient(135deg,#070a0f,#0a0f16 55%,#07090d)}.top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:30px}.brand{display:flex;gap:16px;align-items:center}.mark{width:52px;height:52px;border:1px solid #4c5a6d;border-radius:15px;display:grid;place-items:center;background:#151b24;font-size:28px;font-weight:800}.eyebrow{font-size:13px;letter-spacing:3px;color:var(--cyan);font-weight:700}.title{font-size:58px;line-height:1.02;font-weight:800;margin:10px 0 8px;letter-spacing:-2px}.sub{font-size:18px;color:var(--muted);max-width:780px}.badge{border:1px solid #314052;border-radius:999px;padding:10px 16px;color:#cbd5e1;font-size:13px;letter-spacing:1px}.grid{display:grid;grid-template-columns:1.02fr 1.5fr .82fr;gap:22px;margin-top:28px}.card{background:linear-gradient(180deg,rgba(18,25,35,.95),rgba(11,16,23,.95));border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.24)}.cardhead{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}.dot{width:8px;height:8px;border-radius:50%;background:var(--blue);box-shadow:0 0 14px rgba(78,161,255,.7)}.code{padding:20px 20px 24px;font:13px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;color:#d8e1ed;white-space:pre}.codebar{display:flex;gap:7px;padding:12px 20px;border-bottom:1px solid var(--line)}.pill{font:11px ui-monospace,monospace;color:#8fa1b7;background:#0a0f15;border:1px solid #263241;border-radius:7px;padding:4px 8px}.results{padding:18px}.heroimg{width:100%;height:500px;object-fit:cover;border-radius:13px;border:1px solid #2a3746;background:#080c12}.caption{display:flex;justify-content:space-between;gap:15px;margin-top:13px;font-size:12px;color:var(--muted)}.caption strong{color:#e8eef6}.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.strip img{width:100%;height:110px;object-fit:cover;border-radius:10px;border:1px solid #2a3746}.metrics{padding:18px}.metric{padding:18px 0;border-bottom:1px solid var(--line)}.metric:last-child{border-bottom:0}.metric label{display:block;color:var(--muted);font-size:11px;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:7px}.value{font-size:31px;font-weight:800}.small{font-size:12px;color:var(--muted);line-height:1.5}.status{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid rgba(104,224,180,.35);color:var(--green);border-radius:999px;font-size:11px;text-transform:uppercase;letter-spacing:1px}.footer{display:flex;justify-content:space-between;align-items:center;margin-top:24px;color:#738196;font-size:12px}.tech{display:flex;gap:9px}.tech span{padding:8px 11px;border:1px solid #293646;border-radius:9px;background:#0b1017;color:#b7c4d3}</style></head><body><section class="poster"><header class="top"><div class="brand"><div class="mark">V</div><div><div class="eyebrow">VERITYAGENT · PYTHON AI MINI PROJECTS</div><div class="title">AI DEFECT DETECTOR</div><div class="sub">Reference-image comparison first. PyTorch anomaly detection next. Built for visible scratches, surface damage and image-level inspection experiments.</div></div></div><div class="badge">PROJECT 09 · INDUSTRIAL VISION</div></header><main class="grid"><section class="card"><div class="cardhead"><span>Python / OpenCV</span><span class="dot"></span></div><div class="codebar"><span class="pill">comparison.py</span><span class="pill">live pipeline</span></div><div class="code">def detect_defects(reference, inspection, threshold=22):
-    ref = cv2.cvtColor(reference, cv2.COLOR_BGR2GRAY)
-    img = cv2.cvtColor(inspection, cv2.COLOR_BGR2GRAY)
-
-    # normalize + suppress noise
-    ref = cv2.GaussianBlur(ref, (3, 3), 0)
-    img = cv2.GaussianBlur(img, (3, 3), 0)
-
-    diff = cv2.absdiff(ref, img)
-    mask = (diff &gt; threshold).astype(np.uint8) * 255
-    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN,
-        np.ones((3, 3), np.uint8))
-
-    contours, _ = cv2.findContours(
-        mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    regions = []
-    for contour in contours:
-        area = cv2.contourArea(contour)
-        if area &lt; 30:
-            continue
-        x, y, w, h = cv2.boundingRect(contour)
-        regions.append({
-            "x": x, "y": y,
-            "width": w, "height": h,
-            "area_pixels": int(area)
-        })
-
-    return diff, mask, regions</div></section><section class="card"><div class="cardhead"><span>Actual synthetic inspection result</span><span class="status">● detected</span></div><div class="results"><img class="heroimg" src="../../examples/results/synthetic-scratch-run/annotated_inspection.png" alt="Actual synthetic inspection with detected defect region"><div class="caption"><span><strong>Detected region:</strong> x=356 · y=163 · 52×127 px</span><span>640×480 input</span></div><div class="strip"><img src="../../examples/results/synthetic-scratch-run/reference.png" alt="Reference"><img src="../../examples/results/synthetic-scratch-run/difference_map.png" alt="Difference map"><img src="../../examples/results/synthetic-scratch-run/anomaly_heatmap.png" alt="Anomaly heatmap"></div></div></section><section class="card"><div class="cardhead"><span>Run telemetry</span><span class="dot"></span></div><div class="metrics"><div class="metric"><label>Detected regions</label><div class="value">1</div><div class="small">candidate region retained after area filtering</div></div><div class="metric"><label>Affected pixels</label><div class="value">0.2965%</div><div class="small">911 retained pixels of the 640×480 frame</div></div><div class="metric"><label>Processing time</label><div class="value">34.8 ms</div><div class="small">measured during the included demo run</div></div><div class="metric"><label>Anomaly score</label><div class="value">0.001602</div><div class="small">mean absolute pixel difference ÷ 255; not a probability</div></div><div class="metric"><label>Pipeline</label><div class="small">OpenCV baseline → heatmap → region extraction → JSON report</div></div></div></section></main><footer class="footer"><span>VerityAgent · AI-assisted visual inspection · synthetic demo evidence</span><div class="tech"><span>Python</span><span>OpenCV</span><span>PyTorch</span><span>Streamlit</span></div></footer></section></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VerityAgent — AI Defect Detector · Project 09</title>
+<style>
+:root{--bg:#05070a;--panel:#0b1017;--panel2:#0d141d;--line:#293847;--text:#f4f7fb;--muted:#93a0b3;--cyan:#74e7ff;--blue:#4ea1ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 10%,rgba(78,161,255,.12),transparent 30%),var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text)}
+.frame{max-width:1500px;margin:32px auto;padding:28px;background:linear-gradient(135deg,#080b10,#0d141d);border:1px solid #263444;border-radius:24px;box-shadow:0 24px 80px rgba(0,0,0,.38)}
+.eyebrow{font-size:12px;letter-spacing:3px;color:var(--cyan);font-weight:800}.title{font-size:clamp(34px,5vw,64px);font-weight:900;letter-spacing:-1px;margin:8px 0}.copy{max-width:950px;color:var(--muted);line-height:1.75;font-size:16px}.chips{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.chip{border:1px solid #314052;background:#0a0f15;border-radius:999px;padding:8px 13px;font-size:11px;color:#cbd5e1;letter-spacing:1px}.poster{display:block;width:100%;margin-top:24px;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.3)}
+</style>
+</head>
+<body>
+<main class="frame">
+<div class="eyebrow">VERITYAGENT · PYTHON AI MINI PROJECTS · PROJECT 09</div>
+<div class="title">AI Defect Detector</div>
+<p class="copy">Professional HTML/CSS presentation for the VerityAgent industrial computer-vision project. The embedded poster combines the Python/OpenCV code path, executed synthetic inspection evidence, difference/heatmap outputs, detected-region geometry and measured telemetry.</p>
+<div class="chips"><span class="chip">PYTHON</span><span class="chip">OPENCV</span><span class="chip">PYTORCH</span><span class="chip">STREAMLIT</span><span class="chip">VISUAL INSPECTION</span></div>
+<img class="poster" src="defect-detector-poster.svg" alt="VerityAgent AI Defect Detector professional infographic poster">
+</main>
+</body>
+</html>

@@ -1,20 +1,17 @@
-# Verification record
+# Build verification record
 
-## Local verification
+Local verification performed during repository assembly on 2026-10-27:
 
-- `pytest -q` — **31 passed**.
-- `python -m compileall -q src scripts app.py` — **passed**.
-- Synthetic OpenCV demo — **passed**; the included run produced one retained candidate region and the visual report assets used by the Project 09 poster.
-- PyTorch smoke test — **passed**; a temporary one-epoch model was trained, checkpointed, reloaded and used for inference during local verification.
+- `pytest -q`: **31 passed**.
+- `python -m compileall -q src scripts app.py`: passed.
+- Package editable-build/install check: passed with the environment's installed build backend (`--no-build-isolation`, because this sandbox cannot reach the package index).
+- `verity-defect --help`: passed; both `compare` and `infer` commands are registered.
+- OpenCV synthetic scratch run: produced one candidate region and exported the difference map, binary mask, heatmap, overlay, annotated image, and JSON report. The JSON values and preview image are included under `examples/results/`.
+- PyTorch smoke workflow: trained a one-epoch model on a tiny temporary defect-free sample, safely reloaded the checkpoint, ran inference, and generated an evaluation report. Those temporary smoke-test files are not bundled as a model or presented as accuracy evidence.
 
-## Visual evidence
+Environment limitations:
 
-The README poster is a professional HTML/CSS/vector presentation of the executable synthetic inspection pipeline. Its inspection panel and telemetry are derived from the generated `report.json` values rather than fabricated benchmark claims.
+- Ruff could not be installed or run in the authoring sandbox because the `ruff` executable was absent and outbound package-index access was unavailable. The repository includes `ruff check .` in its GitHub Actions workflow for execution in CI.
+- The Streamlit dashboard source compiled successfully, but the dashboard itself was not launched because Streamlit is not installed in this sandbox. Install the `app` extra and run `streamlit run app.py` to launch it.
 
-## Environment notes
-
-Ruff and the Streamlit dashboard were not treated as locally verified if their optional packages were unavailable in the execution environment. GitHub Actions is configured to run tests, Ruff and Python compilation for Python 3.11–3.13.
-
-## Interpretation
-
-The synthetic run validates implementation and localization plumbing. It does **not** establish industrial defect-detection accuracy. Real deployment requires representative labeled data, controlled imaging, calibration, validation, monitoring and human review.
+The synthetic demo validates program flow and scratch localization only. It is not evidence of real-world industrial defect-detection accuracy.
